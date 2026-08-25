@@ -25,6 +25,21 @@ h1 {
     margin-bottom: 1rem;
 }
 
+.documents-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.4rem 0.8rem;
+    background-color: #eef2ff;
+    color: #2b5fd9;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.documents-link:hover {
+    background-color: #dbe4ff;
+}
+
 #chat-history {
     height: 400px;
     overflow-y: auto;
@@ -82,4 +97,44 @@ button {
 
 button:hover {
     background-color: #1e47ad;
+}
+
+.document-list {
+    list-style: none;
+    padding: 0;
+}
+
+.document-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.document-list a {
+    color: #2b5fd9;
+    text-decoration: none;
+}
+
+.document-list a:hover {
+    text-decoration: underline;
+}
+
+.document-content {
+    white-space: pre-wrap;
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+.sources {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: -0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.sources a {
+    color: #2b5fd9;
 }

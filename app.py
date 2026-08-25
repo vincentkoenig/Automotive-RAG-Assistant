@@ -7,6 +7,7 @@ an die RAG-Pipeline (rag/retrieval.py) weiterleitet.
 
 from flask import Flask, render_template, request, jsonify
 from rag.retrieval import generate_answer
+from rag.ingest import load_documents
 
 app = Flask(__name__)
 
@@ -45,6 +46,32 @@ def chat():
         "sources": result["sources"]
     })
 
+
+@app.route("/documents")
+def documents():
+    """Zeigt eine Übersicht aller internen Dokumente, die der Assistent kennt."""
+    docs = load_documents()
+    return render_template("documents.html", documents=docs)
+
+
+@app.route("/documents/<filename>")
+def view_document(filename):
+    """
+    Zeigt den Volltext eines einzelnen Dokuments.
+
+    Sicherheitshinweis: filename kommt aus der URL (Nutzereingabe) - wir
+    greifen aber NICHT direkt mit diesem Wert auf das Dateisystem zu.
+    Stattdessen gleichen wir ihn gegen die Liste der tatsächlich über
+    load_documents() geladenen, bekannten Dateien ab. Das verhindert
+    Path-Traversal-Angriffe (z.B. filename="../../.env").
+    """
+    docs = load_documents()
+    doc = next((d for d in docs if d["filename"] == filename), None)
+
+    if doc is None:
+        return "Dokument nicht gefunden.", 404
+
+    return render_template("document_detail.html", document=doc)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

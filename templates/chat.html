@@ -10,6 +10,8 @@
         <h1>Interner Wissensassistent</h1>
         <p class="subtitle">Fragen zu Garantie, Leasing, Werkstattabläufen und internen Prozessen</p>
 
+        <a href="{{ url_for('documents') }}" class="documents-link">📄 Alle Dokumente durchsuchen</a>
+
         <div id="chat-history"></div>
 
         <form id="chat-form">
@@ -32,7 +34,6 @@
             input.value = "";
             input.disabled = true;
 
-            // Lade-Indikator anzeigen, während auf die Antwort gewartet wird
             const loadingMessage = appendMessage("bot", "Antwort wird generiert...");
             loadingMessage.classList.add("loading");
 
@@ -45,16 +46,13 @@
 
                 const data = await response.json();
 
-                // Lade-Indikator entfernen, bevor die echte Antwort eingefügt wird
                 loadingMessage.remove();
 
                 if (data.error) {
                     appendMessage("bot", "Fehler: " + data.error);
                 } else {
-                    const sourcesText = data.sources.length
-                        ? `\n\nQuelle(n): ${data.sources.join(", ")}`
-                        : "";
-                    appendMessage("bot", data.answer + sourcesText);
+                    appendMessage("bot", data.answer);
+                    appendSourceLinks(data.sources);
                 }
             } catch (err) {
                 loadingMessage.remove();
@@ -72,6 +70,29 @@
             history.appendChild(messageDiv);
             history.scrollTop = history.scrollHeight;
             return messageDiv;
+        }
+
+        function appendSourceLinks(sources) {
+            if (!sources.length) return;
+
+            const sourcesDiv = document.createElement("div");
+            sourcesDiv.className = "sources";
+            sourcesDiv.appendChild(document.createTextNode("Quelle(n): "));
+
+            sources.forEach((source, index) => {
+                const link = document.createElement("a");
+                link.href = "/documents/" + encodeURIComponent(source);
+                link.textContent = source;
+                link.target = "_blank";
+                sourcesDiv.appendChild(link);
+
+                if (index < sources.length - 1) {
+                    sourcesDiv.appendChild(document.createTextNode(", "));
+                }
+            });
+
+            history.appendChild(sourcesDiv);
+            history.scrollTop = history.scrollHeight;
         }
     </script>
 </body>
