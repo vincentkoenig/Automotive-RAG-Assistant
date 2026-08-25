@@ -46,8 +46,7 @@
             input.value = "";
             input.disabled = true;
 
-            const loadingMessage = appendMessage("bot", "Antwort wird generiert...");
-            loadingMessage.classList.add("loading");
+            const loadingMessage = appendTypingIndicator();
 
             try {
                 const response = await fetch("/api/chat", {
@@ -79,6 +78,15 @@
             const messageDiv = document.createElement("div");
             messageDiv.className = "message " + role;
             messageDiv.textContent = text;
+            history.appendChild(messageDiv);
+            history.scrollTop = history.scrollHeight;
+            return messageDiv;
+        }
+
+        function appendTypingIndicator() {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message bot typing-indicator";
+            messageDiv.innerHTML = '<span></span><span></span><span></span>';
             history.appendChild(messageDiv);
             history.scrollTop = history.scrollHeight;
             return messageDiv;

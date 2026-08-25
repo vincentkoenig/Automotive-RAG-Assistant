@@ -13,13 +13,15 @@
         <h1>Interne Dokumente</h1>
         <p class="subtitle">Übersicht aller Dokumente, die der Wissensassistent durchsucht</p>
 
-        <ul class="document-list">
+        <div class="document-grid">
             {% for doc in documents %}
-                <li>
-                    <a href="{{ url_for('view_document', filename=doc.filename) }}">{{ doc.filename }}</a>
-                </li>
+                <a href="{{ url_for('view_document', filename=doc.filename) }}" class="document-card">
+                    <div class="document-card-icon">📄</div>
+                    <div class="document-card-name">{{ doc.filename }}</div>
+                    <div class="document-card-meta">{{ doc.content|length }} Zeichen</div>
+                </a>
             {% endfor %}
-        </ul>
+        </div>
 
         <p><a href="{{ url_for('index') }}">&larr; Zurück zum Chat</a></p>
     </div>
