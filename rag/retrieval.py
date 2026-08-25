@@ -9,6 +9,7 @@ Retrieval bei jeder einzelnen Chat-Nachricht.
 """
 
 import os
+import re
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -59,8 +60,8 @@ def build_prompt(query: str, chunks: list[dict]) -> str:
 Beantworte die folgende Frage AUSSCHLIESSLICH auf Basis des unten stehenden Kontexts aus internen Dokumenten.
 
 Wichtige Regeln:
-- Wenn die Antwort nicht eindeutig aus dem Kontext hervorgeht, sage das ehrlich - erfinde keine Informationen.
-- Nenne am Ende deiner Antwort, aus welchem Dokument (Quelle) die Information stammt.
+- Wenn die Antwort nicht eindeutig aus dem Kontext hervorgeht, sage das ehrlich - erfinde keine Informationen. Nenne in diesem Fall am Ende "[Quelle: keine]".
+- Wenn du die Frage beantworten kannst, nenne am Ende deiner Antwort in eckigen Klammern die verwendete(n) Quelle(n), im Format [Quelle: dateiname.txt]. Nenne nur Dokumente, die du tatsächlich für die Antwort verwendet hast.
 - Antworte präzise und auf Deutsch.
 
 Kontext aus internen Dokumenten:
@@ -77,8 +78,10 @@ def generate_answer(query: str) -> dict:
     """
     Führt den kompletten RAG-Ablauf aus: Retrieval + Generation.
 
-    Rückgabe: Dict mit 'answer' (GPT-Antwort) und 'sources'
-    (Liste der verwendeten Dokumente, für Transparenz im Chat-UI).
+    Die Quellenliste wird aus der GPT-Antwort selbst extrahiert
+    (per Regex auf "[Quelle: ...]"), nicht aus den rohen Retrieval-
+    Ergebnissen - so zeigen wir nur, was GPT tatsächlich verwendet hat,
+    nicht alle abgerufenen (aber evtl. ungenutzten) Chunks.
     """
     chunks = retrieve_relevant_chunks(query)
     prompt = build_prompt(query, chunks)
@@ -88,13 +91,18 @@ def generate_answer(query: str) -> dict:
         messages=[
             {"role": "user", "content": prompt}
         ],
-        temperature=0.2  # niedrig, weil wir faktische, konsistente Antworten wollen - nicht kreativ
+        temperature=0.2
     )
 
     answer = response.choices[0].message.content
 
-    # Eindeutige Quellen (ohne Duplikate) für die Anzeige im Chat sammeln
-    sources = list(set(chunk["source"] for chunk in chunks))
+    # Alle "[Quelle: dateiname.txt]"-Markierungen aus der Antwort extrahieren
+    found_sources = re.findall(r"\[Quelle:\s*([^\]]+)\]", answer)
+    # Duplikate entfernen, "keine" (Groß-/Kleinschreibung egal) rausfiltern
+    sources = list(set(
+        s.strip() for s in found_sources
+        if s.strip().lower() != "keine"
+    ))
 
     return {
         "answer": answer,
