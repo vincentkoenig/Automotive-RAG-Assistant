@@ -141,7 +141,19 @@ def store_chunks(chunks: list[dict]) -> None:
     print(f"{len(chunks)} Chunks in ChromaDB gespeichert (Collection: '{COLLECTION_NAME}').")
 
 
-# Kleiner manueller Test: Datei direkt ausführen, um zu prüfen ob das Einlesen klappt
+def test_query(query: str, n_results: int = 3):
+    """Testet die Ähnlichkeitssuche isoliert, ohne LLM-Antwort - nur zur Kontrolle."""
+    collection = get_chroma_collection()
+    results = collection.query(query_texts=[query], n_results=n_results)
+
+    print(f"\nSuche: '{query}'\n")
+    for i, doc in enumerate(results["documents"][0]):
+        source = results["metadatas"][0][i]["source"]
+        distance = results["distances"][0][i]
+        print(f"[{i+1}] (Quelle: {source}, Distanz: {distance:.4f})")
+        print(f"    {doc[:100]}...\n")
+
+
 if __name__ == "__main__":
     docs = load_documents()
     print(f"{len(docs)} Dokumente gefunden.")
@@ -149,4 +161,6 @@ if __name__ == "__main__":
     chunks = chunk_all_documents(docs)
     print(f"{len(chunks)} Chunks erzeugt.")
 
-    store_chunks(chunks)
+    # store_chunks(chunks)  # nur beim ersten Mal nötig, jetzt schon in ChromaDB gespeichert
+
+    test_query("Was passiert bei einem Motorschaden?")
