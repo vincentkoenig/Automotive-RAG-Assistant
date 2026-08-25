@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Musterhaus Mobility – Interner Wissensassistent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -12,7 +15,12 @@
 
         <a href="{{ url_for('documents') }}" class="documents-link">📄 Alle Dokumente durchsuchen</a>
 
-        <div id="chat-history"></div>
+        <div id="chat-history">
+            <div class="empty-state">
+                <div class="empty-state-icon">💬</div>
+                <p>Stelle eine Frage zu Garantie, Leasing oder Werkstattabläufen –<br>ich durchsuche dafür die internen Dokumente.</p>
+            </div>
+        </div>
 
         <form id="chat-form">
             <input type="text" id="query-input" placeholder="Stelle deine Frage..." autocomplete="off" required>
@@ -29,6 +37,10 @@
             event.preventDefault();
             const query = input.value.trim();
             if (!query) return;
+
+            // Empty-State-Hinweis entfernen, sobald die erste Frage gestellt wird
+            const emptyState = document.querySelector(".empty-state");
+            if (emptyState) emptyState.remove();
 
             appendMessage("user", query);
             input.value = "";
