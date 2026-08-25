@@ -1,0 +1,34 @@
+WERKSTATTABLAUF
+Musterhaus Mobility GmbH
+
+1. Terminvereinbarung
+Kunden können Werkstatttermine telefonisch, über das Online-Terminportal oder
+persönlich vereinbaren. Für Wartungen wird empfohlen, mindestens 5 Werktage im
+Voraus zu buchen. Bei akuten Problemen (z. B. Warnleuchten, Unfallschäden)
+steht eine Express-Annahme ohne Termin zur Verfügung.
+
+2. Fahrzeugannahme
+Bei Ankunft wird das Fahrzeug vom Serviceberater aufgenommen. Es erfolgt eine
+kurze Sichtprüfung sowie die Erfassung des Kundenanliegens im Werkstattsystem.
+Bestehende Schäden werden dokumentiert, um spätere Missverständnisse zu
+vermeiden.
+
+3. Diagnose und Reparatur
+Nach der Annahme erfolgt die technische Diagnose, bei komplexeren Fällen inkl.
+Fehlercode-Auslesung über die Diagnosesoftware. Der Kunde erhält einen
+Kostenvoranschlag, bevor umfangreichere Reparaturen (über 150 Euro) durchgeführt
+werden. Reine Wartungsarbeiten laut Serviceplan benötigen keine gesonderte
+Freigabe.
+
+4. Ersatzmobilität
+Bei Reparaturen, die länger als einen Tag dauern, kann ein Ersatzfahrzeug
+gestellt werden, sofern verfügbar. Die Reservierung erfolgt idealerweise bereits
+bei der Terminvereinbarung.
+
+5. Abholung und Übergabe
+Nach Abschluss der Arbeiten wird der Kunde telefonisch oder per E-Mail
+informiert. Bei Abholung erfolgt eine kurze Erläuterung der durchgeführten
+Arbeiten durch den Serviceberater sowie die Übergabe der Rechnung. Ersetzte
+Teile können auf Wunsch mitgegeben werden, sofern es sich nicht um
+Garantieteile handelt, die zur Prüfung an den Hersteller zurückgesendet werden
+müssen.

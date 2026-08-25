@@ -1,0 +1,40 @@
+MITARBEITERHANDBUCH – AUSZUG
+Musterhaus Mobility GmbH
+
+1. Arbeitszeiten
+Die reguläre Arbeitszeit beträgt 38 Stunden pro Woche, verteilt auf Montag bis Freitag.
+Die Kernarbeitszeit liegt zwischen 9:00 und 15:00 Uhr. Gleitzeit ist im Rahmen von
+07:00 bis 19:00 Uhr möglich, sofern betriebliche Erfordernisse (z. B. Kundentermine
+in der Werkstatt oder im Verkauf) dies zulassen. Überstunden werden über das
+Zeiterfassungssystem dokumentiert und können innerhalb von sechs Monaten als
+Freizeitausgleich genommen werden.
+
+2. Urlaubsregelung
+Der gesetzliche Mindesturlaub beträgt 24 Werktage pro Jahr. Musterhaus Mobility
+gewährt zusätzlich 6 Tage übergesetzlichen Urlaub, somit insgesamt 30 Urlaubstage
+bei einer 5-Tage-Woche. Urlaubsanträge sind mindestens zwei Wochen im Voraus über
+das interne Personalportal einzureichen. In der Hauptsaison (Juni bis August) gilt
+eine Mindestbesetzung pro Abteilung, die bei der Urlaubsplanung zu beachten ist.
+
+3. Dienstwagennutzung
+Mitarbeitende mit Anspruch auf einen Dienstwagen (ab Positionsstufe 3) können
+diesen im Rahmen der 1%-Regelung auch privat nutzen. Die Versicherung sowie
+Wartung und Reparaturen werden vom Unternehmen getragen, sofern der Schaden
+nicht durch grobe Fahrlässigkeit verursacht wurde. Bei einem Unfall mit dem
+Dienstwagen ist unverzüglich die Personalabteilung sowie die interne
+Versicherungsstelle zu informieren.
+
+4. IT-Richtlinien und Datenschutz
+Der Zugriff auf Kundendaten (CRM-System, Werkstattaufträge, Leasingverträge)
+ist ausschließlich über den persönlichen, passwortgeschützten Account gestattet.
+Kundendaten dürfen nicht auf privaten Geräten gespeichert oder per privater
+E-Mail versendet werden. Bei Verdacht auf eine Datenschutzverletzung ist der
+Datenschutzbeauftragte innerhalb von 24 Stunden zu informieren. Die Nutzung
+externer KI-Tools zur Verarbeitung von Kundendaten ist nur über die vom
+Unternehmen freigegebenen, DSGVO-konformen Systeme zulässig.
+
+5. Umgang mit Kundendaten im Verkaufs- und Werkstattprozess
+Kundendaten werden ausschließlich für die Vertragsabwicklung, Garantieabwicklung
+und Terminkoordination verwendet. Eine Weitergabe an Dritte (z. B. externe
+Werkstätten) erfolgt nur mit ausdrücklicher Zustimmung des Kunden und wird im
+CRM-System dokumentiert.
