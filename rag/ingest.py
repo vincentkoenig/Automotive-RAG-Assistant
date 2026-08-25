@@ -8,10 +8,19 @@ getrennt vom eigentlichen Retrieval zur Laufzeit.
 
 import os
 import re
+import chromadb
+from chromadb.utils import embedding_functions
+from dotenv import load_dotenv
+
+load_dotenv()  # lädt OPENAI_API_KEY aus der .env-Datei in die Umgebungsvariablen
 
 # Pfad zum Dokumentenordner, relativ zu dieser Datei
 DOCUMENTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "documents")
 
+# Pfad, unter dem ChromaDB seine Daten persistent speichert (lokal, dateibasiert)
+CHROMA_DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "chroma_db")
+
+COLLECTION_NAME = "musterhaus_mobility_docs"
 
 def load_documents() -> list[dict]:
     """
@@ -84,15 +93,60 @@ def chunk_all_documents(documents: list[dict]) -> list[dict]:
     return all_chunks
 
 
+def get_chroma_collection():
+    """
+    Erstellt (oder öffnet, falls schon vorhanden) eine persistente ChromaDB-Collection.
+
+    Eine Collection ist konzeptionell vergleichbar mit einer SQL-Tabelle:
+    sie enthält viele "Einträge", hier: Chunk-Text + Vektor + Metadaten.
+
+    Wir übergeben eine OpenAI-Embedding-Funktion, damit ChromaDB automatisch
+    weiß, wie es aus Text einen Vektor erzeugt (sowohl beim Speichern als
+    auch später bei der Suche mit einer neuen Nutzerfrage).
+    """
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+        api_key=os.environ["OPENAI_API_KEY"],
+        model_name="text-embedding-3-small"
+    )
+
+    client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
+
+    collection = client.get_or_create_collection(
+        name=COLLECTION_NAME,
+        embedding_function=openai_ef
+    )
+
+    return collection
+
+
+def store_chunks(chunks: list[dict]) -> None:
+    """
+    Speichert die Chunks in ChromaDB. ChromaDB erzeugt dabei automatisch
+    (über die hinterlegte embedding_function) die Embedding-Vektoren -
+    wir müssen die OpenAI Embeddings API also nicht manuell aufrufen.
+    """
+    collection = get_chroma_collection()
+
+    # ChromaDB erwartet drei parallele Listen: ids, documents (Text), metadatas
+    ids = [f"{chunk['source']}_{chunk['chunk_index']}" for chunk in chunks]
+    documents = [chunk["text"] for chunk in chunks]
+    metadatas = [{"source": chunk["source"], "chunk_index": chunk["chunk_index"]} for chunk in chunks]
+
+    collection.add(
+        ids=ids,
+        documents=documents,
+        metadatas=metadatas
+    )
+
+    print(f"{len(chunks)} Chunks in ChromaDB gespeichert (Collection: '{COLLECTION_NAME}').")
+
+
 # Kleiner manueller Test: Datei direkt ausführen, um zu prüfen ob das Einlesen klappt
 if __name__ == "__main__":
     docs = load_documents()
-    print(f"{len(docs)} Dokumente gefunden:")
-    for doc in docs:
-        print(f"- {doc['filename']} ({len(doc['content'])} Zeichen)")
+    print(f"{len(docs)} Dokumente gefunden.")
 
     chunks = chunk_all_documents(docs)
-    print(f"\n{len(chunks)} Chunks erzeugt:\n")
-    for chunk in chunks:
-        preview = chunk["text"][:60].replace("\n", " ")
-        print(f"[{chunk['source']} #{chunk['chunk_index']}] {preview}...")
+    print(f"{len(chunks)} Chunks erzeugt.")
+
+    store_chunks(chunks)
