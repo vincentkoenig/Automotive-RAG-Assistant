@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Musterhaus Mobility – Interner Wissensassistent</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Interner Wissensassistent</h1>
+        <p class="subtitle">Fragen zu Garantie, Leasing, Werkstattabläufen und internen Prozessen</p>
+
+        <div id="chat-history"></div>
+
+        <form id="chat-form">
+            <input type="text" id="query-input" placeholder="Stelle deine Frage..." autocomplete="off" required>
+            <button type="submit">Senden</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("chat-form");
+        const input = document.getElementById("query-input");
+        const history = document.getElementById("chat-history");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const query = input.value.trim();
+            if (!query) return;
+
+            // Nutzerfrage sofort anzeigen, bevor die Antwort da ist
+            appendMessage("user", query);
+            input.value = "";
+            input.disabled = true;
+
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    appendMessage("bot", "Fehler: " + data.error);
+                } else {
+                    const sourcesText = data.sources.length
+                        ? `\n\nQuelle(n): ${data.sources.join(", ")}`
+                        : "";
+                    appendMessage("bot", data.answer + sourcesText);
+                }
+            } catch (err) {
+                appendMessage("bot", "Es gab ein technisches Problem. Bitte erneut versuchen.");
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        });
+
+        function appendMessage(role, text) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message " + role;
+            messageDiv.textContent = text;
+            history.appendChild(messageDiv);
+            history.scrollTop = history.scrollHeight;
+        }
+    </script>
+</body>
+</html>
