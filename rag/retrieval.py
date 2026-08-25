@@ -98,11 +98,15 @@ def generate_answer(query: str) -> dict:
 
     # Alle "[Quelle: dateiname.txt]"-Markierungen aus der Antwort extrahieren
     found_sources = re.findall(r"\[Quelle:\s*([^\]]+)\]", answer)
-    # Duplikate entfernen, "keine" (Groß-/Kleinschreibung egal) rausfiltern
     sources = list(set(
         s.strip() for s in found_sources
         if s.strip().lower() != "keine"
     ))
+
+    # Markierung aus dem sichtbaren Antworttext entfernen, da die Quelle(n)
+    # bereits separat als eigene Liste zurückgegeben werden - vermeidet
+    # doppelte Anzeige im Chat (einmal inline, einmal als eigene Zeile)
+    answer = re.sub(r"\s*\[Quelle:\s*[^\]]+\]", "", answer).strip()
 
     return {
         "answer": answer,
