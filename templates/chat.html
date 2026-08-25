@@ -39,11 +39,11 @@
             const query = input.value.trim();
             if (!query) return;
 
-            // Empty-State-Hinweis entfernen, sobald die erste Frage gestellt wird
             const emptyState = document.querySelector(".empty-state");
             if (emptyState) emptyState.remove();
 
             appendMessage("user", query);
+            saveChatHistory();
             input.value = "";
             input.disabled = true;
 
@@ -66,9 +66,11 @@
                     appendMessage("bot", data.answer);
                     appendSourceLinks(data.sources);
                 }
+                saveChatHistory();
             } catch (err) {
                 loadingMessage.remove();
                 appendMessage("bot", "Es gab ein technisches Problem. Bitte erneut versuchen.");
+                saveChatHistory();
             } finally {
                 input.disabled = false;
                 input.focus();
@@ -115,6 +117,26 @@
             history.appendChild(sourcesDiv);
             history.scrollTop = history.scrollHeight;
         }
+
+        function saveChatHistory() {
+            // Speichert den aktuellen HTML-Inhalt des Chatverlaufs im Browser.
+            // sessionStorage bleibt bei einem Reload erhalten, wird aber beim
+            // Schließen des Tabs gelöscht - für eine Live-Demo genau richtig.
+            sessionStorage.setItem("chatHistory", history.innerHTML);
+        }
+
+        function loadChatHistory() {
+            const saved = sessionStorage.getItem("chatHistory");
+            if (saved) {
+                history.innerHTML = saved;
+                history.scrollTop = history.scrollHeight;
+                return true;
+            }
+            return false;
+        }
+        // Beim Laden der Seite: gespeicherten Chatverlauf wiederherstellen,
+        // falls vorhanden (z.B. nach einem versehentlichen Reload)
+        loadChatHistory();
     </script>
 </body>
 </html>
