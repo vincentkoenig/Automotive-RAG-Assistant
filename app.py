@@ -29,7 +29,16 @@ def chat():
     if not query:
         return jsonify({"error": "Keine Frage übermittelt."}), 400
 
-    result = generate_answer(query)
+    try:
+        result = generate_answer(query)
+    except Exception as e:
+        # Fängt u.a. den Fall ab, dass die ChromaDB-Collection leer/nicht
+        # initialisiert ist (z.B. wenn rag/ingest.py noch nicht gelaufen ist)
+        app.logger.error(f"Fehler bei der Antwortgenerierung: {e}")
+        return jsonify({
+            "error": "Die Wissensbasis konnte nicht durchsucht werden. "
+                     "Bitte sicherstellen, dass 'python rag/ingest.py' ausgeführt wurde."
+        }), 500
 
     return jsonify({
         "answer": result["answer"],
