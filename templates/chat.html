@@ -15,6 +15,7 @@
         <p class="subtitle">Fragen zu Garantie, Leasing, Werkstattabläufen und internen Prozessen</p>
 
         <a href="{{ url_for('documents') }}" class="documents-link">📄 Alle Dokumente durchsuchen</a>
+        <button id="reset-chat-btn" class="reset-link" type="button">🔄 Chat zurücksetzen</button>
 
         <div id="chat-history">
             <div class="empty-state">
@@ -134,6 +135,22 @@
             }
             return false;
         }
+
+        function resetChat() {
+            // Verlauf sowohl visuell als auch im sessionStorage löschen,
+            // und den Empty-State wiederherstellen, damit der Chat wieder
+            // im "frischen" Ausgangszustand ist
+            sessionStorage.removeItem("chatHistory");
+            history.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <p>Stelle eine Frage zu Garantie, Leasing oder Werkstattabläufen –<br>ich durchsuche dafür die internen Dokumente.</p>
+                </div>
+            `;
+        }
+
+        document.getElementById("reset-chat-btn").addEventListener("click", resetChat);
+        
         // Beim Laden der Seite: gespeicherten Chatverlauf wiederherstellen,
         // falls vorhanden (z.B. nach einem versehentlichen Reload)
         loadChatHistory();
