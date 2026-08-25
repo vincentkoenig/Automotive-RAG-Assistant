@@ -22,7 +22,7 @@ load_dotenv()
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 
-def retrieve_relevant_chunks(query: str, n_results: int = 4) -> list[dict]:
+def retrieve_relevant_chunks(query: str, n_results: int = 5) -> list[dict]:
     """
     Sucht die n_results ähnlichsten Chunks zur Nutzerfrage in ChromaDB.
 

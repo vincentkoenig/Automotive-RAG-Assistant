@@ -52,7 +52,7 @@ für mich selbst und als Gesprächsgrundlage (z.B. im Interview).
 | 2 | Leicht | Wie lange dauert die Herstellergarantie? | ✅ Korrekt, exakte Quelle |
 | 3 | Mittel | Was muss ich tun, wenn mein Dienstwagen einen Unfall hatte? | ✅ Korrekt, exakte Quelle |
 | 4 | Mittel | Kann ich meinen Leasingvertrag vorzeitig beenden? | ✅ Korrekt, exakte Quelle |
-| 5 | Schwer | Was passiert bei einem Motorschaden? | ⚠️ Siehe Analyse unten |
+| 5 | Schwer | Was passiert bei einem Motorschaden? | ✅ Nach Anpassung (n_results 4→5) korrekt, siehe Analyse unten |
 | 6 | Cross-Dokument | Bekomme ich ein Ersatzfahrzeug, wenn mein Auto in der Werkstatt ist? | ✅ Korrekt, exakte Quelle, sauber von Leasing-Rückgabe getrennt |
 | 7 | Out-of-Scope | Wie hoch ist die Mehrwertsteuer in Deutschland? | ✅ Korrekt abgelehnt, keine Halluzination |
 
@@ -80,6 +80,15 @@ verfügbare Information.
   einzelne Punkte aufteilen)
 - `n_results` erhöhen, um mehr Kontext-Puffer zu geben
 - Hybrid-Suche (Vektor + Keyword/BM25) für Fälle mit spezifischen Fachbegriffen
+
+**Update:** Durch Erhöhung von `n_results` von 4 auf 5 in
+`retrieve_relevant_chunks()` wurde der relevante Ausschlüsse-Chunk
+zuverlässig mit in den Kontext aufgenommen. Erneuter Test lieferte eine
+inhaltlich präzise Antwort mit korrektem Bezug auf die Wartungsintervall-
+Bedingung. Die ursprüngliche Hypothese (Chunk zu lang/thematisch verdünnt)
+war demnach nicht die Hauptursache - der Chunk war lediglich knapp außerhalb
+des betrachteten Suchradius. Zeigt: Auch scheinbar kleine Parameter wie
+`n_results` können messbaren Einfluss auf die Antwortqualität haben.
 
 ### Generelle Erkenntnis
 
