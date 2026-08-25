@@ -54,6 +54,11 @@ h1 {
     background-color: #eee;
 }
 
+.message.loading {
+    font-style: italic;
+    color: #888;
+}
+
 #chat-form {
     display: flex;
     gap: 0.5rem;

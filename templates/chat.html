@@ -28,10 +28,13 @@
             const query = input.value.trim();
             if (!query) return;
 
-            // Nutzerfrage sofort anzeigen, bevor die Antwort da ist
             appendMessage("user", query);
             input.value = "";
             input.disabled = true;
+
+            // Lade-Indikator anzeigen, während auf die Antwort gewartet wird
+            const loadingMessage = appendMessage("bot", "Antwort wird generiert...");
+            loadingMessage.classList.add("loading");
 
             try {
                 const response = await fetch("/api/chat", {
@@ -42,6 +45,9 @@
 
                 const data = await response.json();
 
+                // Lade-Indikator entfernen, bevor die echte Antwort eingefügt wird
+                loadingMessage.remove();
+
                 if (data.error) {
                     appendMessage("bot", "Fehler: " + data.error);
                 } else {
@@ -51,6 +57,7 @@
                     appendMessage("bot", data.answer + sourcesText);
                 }
             } catch (err) {
+                loadingMessage.remove();
                 appendMessage("bot", "Es gab ein technisches Problem. Bitte erneut versuchen.");
             } finally {
                 input.disabled = false;
@@ -64,6 +71,7 @@
             messageDiv.textContent = text;
             history.appendChild(messageDiv);
             history.scrollTop = history.scrollHeight;
+            return messageDiv;
         }
     </script>
 </body>
