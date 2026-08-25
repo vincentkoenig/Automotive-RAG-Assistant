@@ -124,21 +124,25 @@ def store_chunks(chunks: list[dict]) -> None:
     Speichert die Chunks in ChromaDB. ChromaDB erzeugt dabei automatisch
     (über die hinterlegte embedding_function) die Embedding-Vektoren -
     wir müssen die OpenAI Embeddings API also nicht manuell aufrufen.
+
+    Nutzt upsert statt add: dadurch ist die Funktion idempotent - ein
+    erneuter Lauf (z.B. nach Änderung eines Dokuments) aktualisiert
+    bestehende Chunks anhand ihrer ID, statt einen Fehler wegen
+    doppelter IDs zu werfen oder Duplikate anzulegen.
     """
     collection = get_chroma_collection()
 
-    # ChromaDB erwartet drei parallele Listen: ids, documents (Text), metadatas
     ids = [f"{chunk['source']}_{chunk['chunk_index']}" for chunk in chunks]
     documents = [chunk["text"] for chunk in chunks]
     metadatas = [{"source": chunk["source"], "chunk_index": chunk["chunk_index"]} for chunk in chunks]
 
-    collection.add(
+    collection.upsert(
         ids=ids,
         documents=documents,
         metadatas=metadatas
     )
 
-    print(f"{len(chunks)} Chunks in ChromaDB gespeichert (Collection: '{COLLECTION_NAME}').")
+    print(f"{len(chunks)} Chunks in ChromaDB gespeichert/aktualisiert (Collection: '{COLLECTION_NAME}').")
 
 
 def test_query(query: str, n_results: int = 3):
@@ -161,6 +165,6 @@ if __name__ == "__main__":
     chunks = chunk_all_documents(docs)
     print(f"{len(chunks)} Chunks erzeugt.")
 
-    # store_chunks(chunks)  # nur beim ersten Mal nötig, jetzt schon in ChromaDB gespeichert
+    store_chunks(chunks)
 
     test_query("Was passiert bei einem Motorschaden?")
