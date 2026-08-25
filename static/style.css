@@ -45,7 +45,7 @@ body {
     border-top: 4px solid var(--color-primary);
 }
 
-.subtitle {
+.chat-container > p.subtitle {
     background-color: var(--color-dark);
     color: #cccccc;
     margin: 0;
