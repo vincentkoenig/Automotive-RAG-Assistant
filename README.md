@@ -149,14 +149,6 @@ http://127.0.0.1:5000
 
 Die Retrieval-Qualität wurde anhand von sieben Testfragen unterschiedlicher Schwierigkeit systematisch geprüft (leicht, mittel formuliert, indirekt formuliert, Cross-Dokument-Fragen, Fragen außerhalb der Wissensbasis). Details, inklusive einer dokumentierten und später behobenen Schwäche bei stark umschriebenen Fragen sowie den daraus gezogenen Erkenntnissen, siehe [`NOTES.md`](NOTES.md).
 
-## Was fehlt bewusst (Zeitrahmen: 3 Tage MVP)
-
-- Kein Reranking oder Hybrid-Suche (Vektor + Keyword/BM25)
-- Keine Nutzerauthentifizierung / Multi-User-Unterstützung
-- Keine automatisierte Evaluation (z. B. RAGAS) — nur systematische, manuelle Testfragen
-- Chatverlauf nur clientseitig persistiert (sessionStorage), nicht serverseitig über mehrere Geräte hinweg
-- Kein Cloud-Deployment (lokale Demo für dieses MVP ausreichend)
-
 ## Datenschutz
 
 Alle Dokumente sind fiktiv. In einem echten Einsatz mit tatsächlichen Kundendaten wären zusätzlich erforderlich: Zugriffskontrolle je nach Mitarbeiterrolle, ein Auftragsverarbeitungsvertrag mit dem LLM-Anbieter (oder Einsatz eines lokal gehosteten Modells), sowie eine bewusste Prüfung, welche Dokumentinhalte überhaupt für eine KI-Verarbeitung geeignet sind.
